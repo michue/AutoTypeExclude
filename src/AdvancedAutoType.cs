@@ -34,6 +34,7 @@ namespace AdvancedAutoType
       m_host = host;
 
       SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
+
       AutoType.FilterCompilePre += AutoType_FilterCompilePre;
       AutoType.SequenceQueriesBegin += AutoType_SequenceQueriesBegin;
       AutoType.SequenceQueriesEnd += AutoType_SequenceQueriesEnd;
@@ -52,6 +53,7 @@ namespace AdvancedAutoType
       GlobalWindowManager.WindowRemoved -= OnWindowRemoved;
 
       SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
+
       AutoType.FilterCompilePre -= this.AutoType_FilterCompilePre;
       AutoType.SequenceQueriesEnd -= this.AutoType_SequenceQueriesBegin;
       AutoType.SequenceQueriesEnd -= this.AutoType_SequenceQueriesEnd;
@@ -177,6 +179,10 @@ namespace AdvancedAutoType
         CustomRichTextBoxEx rtbPlaceholders = Tools.GetControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
         rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
       }
+      else if (e.Form is GroupForm)
+      {
+        SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
+      }
     }
 
 	private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
@@ -186,6 +192,10 @@ namespace AdvancedAutoType
         EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
         CustomRichTextBoxEx rtbPlaceholders = Tools.GetControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
         rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
+      }
+      else if (e.Form is GroupForm)
+      {
+        SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
       }
     }
 

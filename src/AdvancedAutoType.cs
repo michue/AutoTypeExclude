@@ -137,11 +137,11 @@ namespace AdvancedAutoType
         SprContext sprCtx = new SprContext(pe, pdCurrent,
           SprCompileFlags.NonActive);
 
-        foreach (AutoTypeAssociation a in pe.AutoType.Associations)
+        foreach (AutoTypeAssociation assoc in pe.AutoType.Associations)
         {
-          if (a.Sequence.Contains(ExclusionPlaceholder))
+          if (assoc.Sequence.Contains(ExclusionPlaceholder))
           {
-            string strFilter = SprEngine.Compile(a.WindowName, sprCtx);
+            string strFilter = SprEngine.Compile(assoc.WindowName, sprCtx);
             if (IsMatchWindow(e.TargetWindowTitle, strFilter) && pe.GetAutoTypeEnabled())
             {
               pe.AutoType.Enabled = false;
@@ -171,7 +171,7 @@ namespace AdvancedAutoType
       m_lExcludedPwEntries.Clear();
     }
 
-	private void OnWindowAdded(object sender, GwmWindowEventArgs e)
+    private void OnWindowAdded(object sender, GwmWindowEventArgs e)
     {
       if (e.Form is EditAutoTypeItemForm)
       {
@@ -185,7 +185,7 @@ namespace AdvancedAutoType
       }
     }
 
-	private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
+    private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
     {
       if (e.Form is EditAutoTypeItemForm)
       {

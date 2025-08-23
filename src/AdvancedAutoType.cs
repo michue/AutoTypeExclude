@@ -20,7 +20,7 @@ namespace AdvancedAutoType
 {
   public sealed class AdvancedAutoTypeExt : Plugin
   {
-    public static string ExclusionPlaceholder = "{AAT_EXCL}";
+    public static string ExclusionPlaceholder = "{EXCLUDE_ENTRY}";
 
     #region class members
     private IPluginHost m_host = null;
@@ -205,7 +205,7 @@ namespace AdvancedAutoType
       EditAutoTypeItemForm form = rtbPlaceholders.Parent as EditAutoTypeItemForm;
 
       CustomRichTextBoxEx rbKeySeq = Tools.GetControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
-      if (e.LinkText.Equals(ExclusionPlaceholder))
+      if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
       {
         rbKeySeq.Text = ExclusionPlaceholder;
         rbKeySeq.Select(ExclusionPlaceholder.Length, 0);

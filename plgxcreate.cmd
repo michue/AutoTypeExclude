@@ -19,17 +19,18 @@ echo Copying files
 xcopy src plgx /s /e /exclude:plgxexclude.txt > nul
 
 echo Compiling PlgX
-cd..
-cd _KeePass_Release
-KeePass.exe --plgx-create "%~dp0plgx" -plgx-prereq-net:%plgxnet% -plgx-prereq-kp:%plgxkp% -plgx-prereq-os:%plgxos%
-cd ..
-cd %CurrDirName%
+REM cd..
+REM cd _KeePass_Release
+"C:\Program Files (x86)\KeePass\KeePass.exe" --plgx-create "%~dp0plgx" -plgx-prereq-net:%plgxnet% -plgx-prereq-kp:%plgxkp% -plgx-prereq-os:%plgxos%
+REM cd ..
+REM cd %CurrDirName%
 
+cd
 echo Copying PlgX to KeePass plugin folder
-copy plgx.plgx "..\_KeePass_Release\Plugins\%CurrDirName%.plgx"
+copy plgx.plgx "..\KeePass2.x\Build\KeePass\Release\Plugins\%CurrDirName%.plgx"
 
-echo Releasing PlgX
-move /y plgx.plgx "..\_Releases\%CurrDirName%.plgx"
+REM echo Releasing PlgX
+REM move /y plgx.plgx "..\_Releases\%CurrDirName%.plgx"
 
 echo Cleaning up
 rmdir /s /q plgx

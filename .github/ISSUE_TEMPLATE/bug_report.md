@@ -30,7 +30,7 @@ assignees: ''
 ## Context
 [NOTE]: # (Provide any additional information you may have)
 OS: 
-KeePass Version:
-Plugin Version:
+KeePass Version: 
+Plugin Version: 
 
-[NOTE]: # (If possible, please attach a debug file. Have a look at the wiki for details.)
+[NOTE]: # (If possible, please attach an example database showcasing the bug.)

@@ -14,7 +14,6 @@ using KeePassLib;
 using KeePassLib.Collections;
 using KeePassLib.Delegates;
 using KeePassLib.Utility;
-using PluginTools;
 
 namespace AutoTypeExclude
 {
@@ -176,7 +175,7 @@ namespace AutoTypeExclude
       if (e.Form is EditAutoTypeItemForm)
       {
         EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = Tools.GetControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
+        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
         rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
       }
       else if (e.Form is GroupForm)
@@ -190,7 +189,7 @@ namespace AutoTypeExclude
       if (e.Form is EditAutoTypeItemForm)
       {
         EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = Tools.GetControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
+        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
         rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
       }
       else if (e.Form is GroupForm)
@@ -204,12 +203,22 @@ namespace AutoTypeExclude
       CustomRichTextBoxEx rtbPlaceholders = sender as CustomRichTextBoxEx;
       EditAutoTypeItemForm form = rtbPlaceholders.Parent as EditAutoTypeItemForm;
 
-      CustomRichTextBoxEx rbKeySeq = Tools.GetControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
+      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
       if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
       {
         rbKeySeq.Text = ExclusionPlaceholder;
         rbKeySeq.Select(ExclusionPlaceholder.Length, 0);
       }
+    }
+
+    public static Control FindControl(string control, Control form)
+    {
+      if (string.IsNullOrEmpty(control) || form == null) return null;
+
+      Control[] cntrls = form.Controls.Find(control, true);
+
+      if (cntrls.Length == 0) return null;
+      else return cntrls[0];
     }
 
     public override string UpdateUrl

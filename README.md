@@ -1,98 +1,56 @@
-# Advanced Auto-Type
-[![Version](https://img.shields.io/github/release/rookiestyle/advancedautotype)](https://github.com/rookiestyle/advancedautotype/releases/latest)
-[![Releasedate](https://img.shields.io/github/release-date/rookiestyle/advancedautotype)](https://github.com/rookiestyle/advancedautotype/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/rookiestyle/advancedautotype/total?color=%2300cc00)](https://github.com/rookiestyle/advancedautotype/releases/latest/download/AdvancedAutoType.plgx)\
-[![License: GPL v3](https://img.shields.io/github/license/rookiestyle/advancedautotype)](https://www.gnu.org/licenses/gpl-3.0)
+# Auto-Type Exclude
+[![Version](https://img.shields.io/github/release/michue/autotypeexclude)](https://github.com/michue/autotypeexclude/releases/latest)
+[![Releasedate](https://img.shields.io/github/release-date/michue/autotypeexclude)](https://github.com/michue/autotypeexclude/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/michue/autotypeexclude/total?color=%2300cc00)](https://github.com/michue/autotypeexclude/releases/latest/download/AutoTypeExclude.plgx)\
+[![License: GPLv3](https://img.shields.io/github/license/michue/autotypeexclude)](https://www.gnu.org/licenses/gpl-3.0)
 
-This KeePass plugin enhances KeePass' Auto-Type feature.
-
-- Various enhancements to the Auto-Type entry selection
-- Hotkey to Auto-Type password only - if configured followed by [Enter]
-- Hotkey to Auto-Type username only - if configured followed by [Enter]
-- Hotkey to AutoType an alternative sequence
+This KeePass plugin extends KeePass' Auto-Type feature with an additional placeholder, `{EXCLUDE_ENTRY}`. This allows you to exclude an entry from auto-typing based on the target window.
 
 # Table of Contents
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [Translations](#translations)
 - [Download & updates](#download--updates)
 - [Requirements](#requirements)
 
-# Configuration
-Advanced Auto-Type integrates into KeePass' options form.\
-<img src="images/AlternateAutoType%20-%20Options.png" alt="Options 1" />  
-<img src="images/AlternateAutoType%20-%20Options%202.png" alt="Options 2" />
-
-In the first tab  you can configure the hotkeys Advanced Auto-Type will react on.  
-In the second tab you can (de)activate the enhancements to the Auto-Type entry selection.
 # Usage
-## Auto-Type hotkey configuration  
-This tab basically mimics KeePass' integration tab with regards to hotkeys.  
-You can define hotkeys for *Global Auto-Type* and *Global Auto-Type password only* in both tabs.
+The reduce the configuration amount for type-type, KeePass uses entry titles as filters for window titles by default.
+But sometimes you find yourself in the situation, that the entry title matches more windows than you would've liked.
+To exclude the entry from auto-typing on those windows, **Auto-Type Exclude** provides the placeholder `{EXCLUDE_ENTRY}`.
 
-In addition, you can define whether *Global Auto-Type password only* will send an [Enter] key after the password was auto-typed.  
-You can also define the hotkey for the Advanced Auto-Type specific sequence.
+Simply create a custom sequence with matching the title of the window, on which you want the entry to be excluded from auto-typing.
+As the sequence select the new placeholder `{EXCLUDE_ENTRY}`.
+The plugin looks for this placeholder and excludes the entry, if the window specifier matches the active window title.
 
-This is only possible on Windows.
-## Auto-Type entry selection enhancements
-While the Auto-Type entry selection is a great way to pick one of the matching candidates, it still lacks some features that this plugin adds.
+*Note:* It is sufficient, if the placeholder is only part of the sequence - excluding will work nonetheless.
+But since the the rest of the sequence will never be used, it is recommended to trim the sequence to only `{EXCLUDE_ENTRY}` for clarity.
 
-- Search as you type allows filtering entries in the result list - can be helpful in case many entries are found
-- Sortable columns
-- Show database name if entries from more than one database are shown
-- Exclude entries in expired groups
-- Windows only: Click username / password to only auto-type those - if configured, the Auto-Type entry selection form will stay open
+## Example
+Let's assume you have an entry for the gaming platform [Steam](https://store.steampowered.com/), but you also are a big fan of industrial heritage and keep an account on [Steam Heritage](https://www.steamheritage.co.uk/).
+Using Auto-Type on the login page of *Steam Heritage* will show the selection dialog, since both entry titles match the window title.
+But you are never gonna choose your *Steam* credentials in this occasion and are stuck with an additional click each time.
 
-<img src="images/AlternateAutoType%20-%20Selection%201.png" alt="Entry selection 1" />  
-<img src="images/AlternateAutoType%20-%20Selection%202.png" alt="Entry selection 2" />
+![Auto-Type Entry Selection window](images/AutoTypeExclude%20-%20Auto-Type%20Entry%20Selection.png)
 
-## Auto-Type an alternative sequence
-There are quite a few sites that (occasionally) require you to enter different data beside username and/or password, e. g. an OTP, a PIN, ... \
-Advanced Auto-Type offers the `{AAT}` placeholder for that.
+To exclude your *Steam* entry from matching the *Steam Heritage* with this plugin, you open the *Steam* entry and add a custom Auto-Type sequence for this entry.
+The window specifier should match the site you want this entry to be excluded from (i.e. `*Steam Heritage*`) and the sequence is simply the new placeholder `{EXCLUDE_ENTRY}`.
 
-Example: `{USERNAME}{TAB}{PASSWORD}{ENTER}{AAT}{S:PIN}{ENTER}`
+![Edit Steam Entry window](images/AutoTypeExclude%20-%20Edit%20Steam%20Entry.png)
 
-Global Auto-Type will type {USERNAME}{TAB}{PASSWORD}{ENTER}
-AAT hotkey will autotype {S:PIN}{ENTER}
-Password only hotkey will autotype the password - {ENTER} is optional and the {AAT} placeholder is NOT required in this case
-
-<img src="images/AlternateAutoType%20-%20AAT.png" alt="Entry selection AAT" />
-As you can see, Advanced Auto-Type ensures that only entries having an alternative sequence defined are shown.
-
-## Auto-Type password only
-Although KeePass now offers this as one more hotkey out of the box, I decided to keep it a part of this plugin.\
-Advanced Auto-Type will let you choose between two options:  
-- AutoType the password
-- Auto-Type password followed by [ENTER] to automatically submit the login form
-
-## Quick add window titles to Auto-Type sequences  
-Advanced Auto-Type offers a shortcut to add window titles to entries' Auto-Type sequences.
-
-Select the entry/entries and pick the window title from the context menu.  
-Press [Shift] to directly edit the added sequence.
-
+The next time you use Auto-Type to login in to your *Steam Heritage* account, you won't to bothered by the selection dialog and can enjoy Britain's industrial heritage right away.
 
 # Translations
-Advanced Auto-Type is provided with English language built-in and allow usage of translation files.
-These translation files need to be placed in a folder called *Translations* inside in your plugin folder.
-If a text is missing in the translation file, it is backfilled with English text.
-You're welcome to add additional translation files by creating a pull request as described in the [wiki](https://github.com/Rookiestyle/AdvancedAutoType/wiki/Create-or-update-translations).
-
-Naming convention for translation files: `<plugin name>.<language identifier>.language.xml`\
-Example: `AdvancedAutoType.de.language.xml`
-  
-The language identifier in the filename must match the language identifier inside the KeePass language that you can select using *View -> Change language...*\
-This identifier is shown there as well, if you have [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck) installed
+Auto-Type Exclude does not expose any user facing text. Therefore translations are not necessary.
 
 # Download & updates
 Please follow these links to download the plugin file itself.
-- [Download newest release](https://github.com/rookiestyle/advancedautotype/releases/latest/download/AdvancedAutoType.plgx)
-- [Download history](https://github.com/rookiestyle/advancedautotype/releases)
+- [Download newest release](https://github.com/michue/autotypeexclude/releases/latest/download/AutoTypeExclude.zip)
+- [Download history](https://github.com/michue/autotypeexclude/releases)
 
 If you're interested in any of the available translations in addition, please download them from the [Translations](Translations) folder.
 
-In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck/) to update both the plugin and its translations automatically.  
-See the [one click plugin update wiki](https://github.com/Rookiestyle/EarlyUpdateCheck/wiki/One-click-plugin-update) for more details.
+In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck/) to update both the plugin and its translations automatically.
+See the corresponding [wiki](https://github.com/Rookiestyle/EarlyUpdateCheck/wiki/One-click-plugin-update) for more details.
+
 # Requirements
-* KeePass: 2.42
+* KeePass: 2.59
 * .NET framework: 3.5

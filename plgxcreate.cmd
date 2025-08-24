@@ -9,28 +9,22 @@ cd %~dp0
 for %%* in (.) do set CurrDirName=%%~nx*
 echo Processing %CurrDirName%
 
-echo Deleting existing PlgX folder
+echo Deleting existing plgx folder
 rmdir /s /q plgx
 
-echo Creating PlgX folder
+echo Creating plgx folder
 mkdir plgx
 
 echo Copying files
 xcopy src plgx /s /e /exclude:plgxexclude.txt > nul
 
-echo Compiling PlgX
-REM cd..
-REM cd _KeePass_Release
-"C:\Program Files (x86)\KeePass\KeePass.exe" --plgx-create "%~dp0plgx" -plgx-prereq-net:%plgxnet% -plgx-prereq-kp:%plgxkp% -plgx-prereq-os:%plgxos%
-REM cd ..
-REM cd %CurrDirName%
+echo Compiling plgx
+src\bin\ReleasePlgx\KeePass.exe --plgx-create "%~dp0plgx" -plgx-prereq-net:%plgxnet% -plgx-prereq-kp:%plgxkp% -plgx-prereq-os:%plgxos%
 
-cd
-echo Copying PlgX to KeePass plugin folder
-copy plgx.plgx "..\KeePass2.x\Build\KeePass\Release\Plugins\%CurrDirName%.plgx"
-
-REM echo Releasing PlgX
-REM move /y plgx.plgx "..\_Releases\%CurrDirName%.plgx"
+echo Move plgx to KeePass plugin folder
+rmdir /s / q src\bin\ReleasePlgx\Plugins
+mkdir src\bin\ReleasePlgx\Plugins
+move /y plgx.plgx "src\bin\ReleasePlgx\Plugins\%CurrDirName%.plgx"
 
 echo Cleaning up
 rmdir /s /q plgx

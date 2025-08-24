@@ -4,7 +4,7 @@
 [![Downloads](https://img.shields.io/github/downloads/michue/autotypeexclude/total?color=%2300cc00)](https://github.com/michue/autotypeexclude/releases/latest/download/AutoTypeExclude.plgx)\
 [![License: GPLv3](https://img.shields.io/github/license/michue/autotypeexclude)](https://www.gnu.org/licenses/gpl-3.0)
 
-This KeePass plugin extends KeePass' Auto-Type feature with an additional placeholder, `{EXCLUDE_ENTRY}`. This allows you to exclude an entry from auto-typing based on the target window.
+This KeePass plugin extends KeePass' Auto-Type feature with an additional placeholder, `{EXCLUDE_ENTRY}`. This allows you to exclude an entry from auto-typing based on the target window specifier.
 
 # Table of Contents
 - [Usage](#usage)

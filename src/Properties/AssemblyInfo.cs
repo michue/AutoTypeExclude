@@ -4,18 +4,15 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 #endregion
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Advanced Auto-Type")]
-[assembly: AssemblyDescription(@"Hotkeys for typing only username or password and an alternative autotype sequence.
-KeePass types EITHER everything before OR everything after {AAT}. 
-
-Various other enhancements, check the options")]
+[assembly: AssemblyTitle("Auto-Type Exclude")]
+[assembly: AssemblyDescription(@"Provides a placeholder to exclude an entry from the Auto-Type feature based on the given target window specifier.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("rookiestyle")]
+[assembly: AssemblyCompany("michue")]
 [assembly: AssemblyProduct("KeePass Plugin")]
-[assembly: AssemblyCopyright("Copyright 2020-2024")]
+[assembly: AssemblyCopyright("Copyright 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // This sets the default COM visibility of types in the assembly to invisible.
@@ -25,9 +22,7 @@ Various other enhancements, check the options")]
 //
 // Major.Minor.Build.Revision
 //
-// You can specify all the values or you can use the default the Revision and 
+// You can specify all the values or you can use the default the Revision and
 // Build Numbers by using the '*' as shown below:
-[assembly: AssemblyVersion("2.2")]
-[assembly: AssemblyFileVersion("2.2")]
-[assembly: Guid("78C152F3-EAF8-4FFC-9BE3-F5DC0CD66E5D")]
-
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyFileVersion("1.0.0")]

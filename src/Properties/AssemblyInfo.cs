@@ -1,6 +1,6 @@
 #region Using directives
-using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 #endregion
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Auto-Type Exclude")]
 [assembly: AssemblyDescription(@"Provides a placeholder to exclude an entry from the Auto-Type feature based on the given target window specifier.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("michue")]
+[assembly: AssemblyCompany("Michael Hüpkes")]
 [assembly: AssemblyProduct("KeePass Plugin")]
 [assembly: AssemblyCopyright("Copyright 2025")]
 [assembly: AssemblyTrademark("")]
@@ -26,3 +26,4 @@ using System.Runtime.InteropServices;
 // Build Numbers by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
+[assembly: NeutralResourcesLanguage("en")]

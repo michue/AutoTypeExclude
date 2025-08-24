@@ -28,6 +28,7 @@ move /y plgx.plgx "src\bin\ReleasePlgx\Plugins\%CurrDirName%.plgx"
 
 echo Cleaning up
 rmdir /s /q plgx
+del src\bin\ReleasePlgx\AutoTypeExclude.dll
 
 echo Compiled with following minimum requirements:
 echo .NET    = %plgxnet%

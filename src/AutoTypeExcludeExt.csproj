@@ -5,7 +5,7 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <PlgxKeePassVersion>2.42</PlgxKeePassVersion>
+    <PlgxKeePassVersion>2.59</PlgxKeePassVersion>
     <PlgXOS>
     </PlgXOS>
   </PropertyGroup>
@@ -59,7 +59,7 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleasePlgx|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\ReleasePlgx\</OutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>

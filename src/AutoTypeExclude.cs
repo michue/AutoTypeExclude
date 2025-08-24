@@ -214,12 +214,12 @@ namespace AutoTypeExclude
 
     public override string UpdateUrl
     {
-      get { return @"https://raw.githubusercontent.com/rookiestyle/advancedautotype/master/version.info"; }
+      get { return @"https://raw.githubusercontent.com/michue/autotypeexclude/main/version.info"; }
     }
 
     public override Image SmallIcon
     {
-      get { return GfxUtil.ScaleImage(Resources.smallicon, 16, 16); }
+      get { return GfxUtil.ScaleImage(Resources.SmallIcon, 16, 16); }
     }
   }
 }

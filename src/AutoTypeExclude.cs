@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using System.Windows.Forms;
-using KeePass;
 using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
@@ -23,6 +21,7 @@ namespace AutoTypeExclude
 
     #region class members
     private IPluginHost m_host = null;
+    private MethodInfo m_miIsMatchWindow = null;
 
     private List<PwEntry> m_lExcludedPwEntries = new List<PwEntry>();
     #endregion
@@ -31,6 +30,8 @@ namespace AutoTypeExclude
     {
       Terminate();
       m_host = host;
+
+      m_miIsMatchWindow = typeof(AutoType).GetMethod("IsMatchWindow", BindingFlags.Static | BindingFlags.NonPublic);
 
       SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
 
@@ -60,66 +61,12 @@ namespace AutoTypeExclude
       m_host = null;
     }
 
-    private string AdjustSequence(string sequence, bool bResetPWOnly)
-    {
-      return sequence.Replace(ExclusionPlaceholder, "");
-    }
-
     private void AutoType_FilterCompilePre(object sender, AutoTypeEventArgs e)
     {
       /* This is only required if the Auto-Type Entry Selection window is NOT shown
-			 * If the window is shown, the auto-type sequences are already adjusted
-			*/
-      e.Sequence = AdjustSequence(e.Sequence, true);
-    }
-
-    private static readonly char[] g_vNormToHyphen = new char[] {
-			// Sync with UI option name
-			'\u2010', // Hyphen
-			'\u2011', // Non-breaking hyphen
-			'\u2012', // Figure dash
-			'\u2013', // En dash
-			'\u2014', // Em dash
-			'\u2015', // Horizontal bar
-			'\u2212' // Minus sign
-		};
-    internal static string NormalizeWindowText(string str)
-    {
-      if (string.IsNullOrEmpty(str)) return string.Empty;
-
-      str = str.Trim();
-
-      if (Program.Config.Integration.AutoTypeMatchNormDashes &&
-        (str.IndexOfAny(g_vNormToHyphen) >= 0))
-      {
-        for (int i = 0; i < g_vNormToHyphen.Length; ++i)
-          str = str.Replace(g_vNormToHyphen[i], '-');
-      }
-
-      return str;
-    }
-
-    internal static bool IsMatchWindow(string strWindow, string strFilter)
-    {
-      if (strWindow == null) { Debug.Assert(false); return false; }
-      if (strFilter == null) { Debug.Assert(false); return false; }
-
-      Debug.Assert(NormalizeWindowText(strWindow) == strWindow); // Should be done by caller
-      string strF = NormalizeWindowText(strFilter);
-
-      int ccF = strF.Length;
-      if ((ccF > 4) && (strF[0] == '/') && (strF[1] == '/') &&
-        (strF[ccF - 2] == '/') && (strF[ccF - 1] == '/'))
-      {
-        try
-        {
-          string strRx = strF.Substring(2, ccF - 4);
-          return Regex.IsMatch(strWindow, strRx, RegexOptions.IgnoreCase);
-        }
-        catch (Exception) { return false; }
-      }
-
-      return StrUtil.SimplePatternMatch(strF, strWindow, StrUtil.CaseIgnoreCmp);
+       * If the window is shown, the auto-type sequences are already adjusted
+      */
+      e.Sequence = e.Sequence.Replace(ExclusionPlaceholder, "");
     }
 
     private void AutoType_SequenceQueriesBegin(object sender, SequenceQueriesEventArgs e)
@@ -141,7 +88,10 @@ namespace AutoTypeExclude
           if (assoc.Sequence.Contains(ExclusionPlaceholder))
           {
             string strFilter = SprEngine.Compile(assoc.WindowName, sprCtx);
-            if (IsMatchWindow(e.TargetWindowTitle, strFilter) && pe.GetAutoTypeEnabled())
+
+            bool bMatch = (bool)m_miIsMatchWindow.Invoke(null, new object[] { e.TargetWindowTitle, strFilter });
+
+            if (bMatch && pe.GetAutoTypeEnabled())
             {
               pe.AutoType.Enabled = false;
               m_lExcludedPwEntries.Add(pe);

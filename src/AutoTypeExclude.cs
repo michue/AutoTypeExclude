@@ -16,9 +16,9 @@ using KeePassLib.Delegates;
 using KeePassLib.Utility;
 using PluginTools;
 
-namespace AdvancedAutoType
+namespace AutoTypeExclude
 {
-  public sealed class AdvancedAutoTypeExt : Plugin
+  public sealed class AutoTypeExcludeExt : Plugin
   {
     public static string ExclusionPlaceholder = "{EXCLUDE_ENTRY}";
 

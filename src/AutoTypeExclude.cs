@@ -26,6 +26,17 @@ namespace AutoTypeExclude
     private List<PwEntry> m_lExcludedPwEntries = new List<PwEntry>();
     #endregion
 
+    #region plugin interface
+    public override Image SmallIcon
+    {
+      get { return GfxUtil.ScaleImage(Resources.SmallIcon, 16, 16); }
+    }
+
+    public override string UpdateUrl
+    {
+      get { return @"https://raw.githubusercontent.com/michue/autotypeexclude/main/version.info"; }
+    }
+
     public override bool Initialize(IPluginHost host)
     {
       Terminate();
@@ -33,14 +44,14 @@ namespace AutoTypeExclude
 
       m_miIsMatchWindow = typeof(AutoType).GetMethod("IsMatchWindow", BindingFlags.Static | BindingFlags.NonPublic);
 
-      SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
+      GlobalWindowManager.WindowAdded += OnWindowAdded;
+      GlobalWindowManager.WindowRemoved += OnWindowRemoved;
 
       AutoType.FilterCompilePre += AutoType_FilterCompilePre;
       AutoType.SequenceQueriesBegin += AutoType_SequenceQueriesBegin;
       AutoType.SequenceQueriesEnd += AutoType_SequenceQueriesEnd;
 
-      GlobalWindowManager.WindowAdded += OnWindowAdded;
-      GlobalWindowManager.WindowRemoved += OnWindowRemoved;
+      SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
 
       return true;
     }
@@ -49,18 +60,73 @@ namespace AutoTypeExclude
     {
       if (m_host == null) return;
 
-      GlobalWindowManager.WindowAdded -= OnWindowAdded;
-      GlobalWindowManager.WindowRemoved -= OnWindowRemoved;
-
       SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
 
       AutoType.FilterCompilePre -= this.AutoType_FilterCompilePre;
       AutoType.SequenceQueriesEnd -= this.AutoType_SequenceQueriesBegin;
       AutoType.SequenceQueriesEnd -= this.AutoType_SequenceQueriesEnd;
 
+      GlobalWindowManager.WindowAdded -= OnWindowAdded;
+      GlobalWindowManager.WindowRemoved -= OnWindowRemoved;
+
       m_host = null;
     }
+    #endregion
 
+    #region placeholder handling
+    public static Control FindControl(string control, Control form)
+    {
+      if (string.IsNullOrEmpty(control) || form == null) return null;
+
+      Control[] cntrls = form.Controls.Find(control, true);
+
+      if (cntrls.Length == 0) return null;
+      else return cntrls[0];
+    }
+
+    private void OnWindowAdded(object sender, GwmWindowEventArgs e)
+    {
+      if (e.Form is EditAutoTypeItemForm)
+      {
+        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
+        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
+        rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
+      }
+      else if (e.Form is GroupForm)
+      {
+        SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
+      }
+    }
+
+    private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
+    {
+      if (e.Form is EditAutoTypeItemForm)
+      {
+        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
+        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
+        rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
+      }
+      else if (e.Form is GroupForm)
+      {
+        SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
+      }
+    }
+
+    private void PlaceholdersLinkClicked(object sender, LinkClickedEventArgs e)
+    {
+      CustomRichTextBoxEx rtbPlaceholders = sender as CustomRichTextBoxEx;
+      EditAutoTypeItemForm form = rtbPlaceholders.Parent as EditAutoTypeItemForm;
+
+      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
+      if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
+      {
+        rbKeySeq.Text = ExclusionPlaceholder;
+        rbKeySeq.Select(ExclusionPlaceholder.Length, 0);
+      }
+    }
+    #endregion
+
+    #region auto-type event handlers
     private void AutoType_FilterCompilePre(object sender, AutoTypeEventArgs e)
     {
       /* This is only required if the Auto-Type Entry Selection window is NOT shown
@@ -119,66 +185,6 @@ namespace AutoTypeExclude
 
       m_lExcludedPwEntries.Clear();
     }
-
-    private void OnWindowAdded(object sender, GwmWindowEventArgs e)
-    {
-      if (e.Form is EditAutoTypeItemForm)
-      {
-        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
-        rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
-      }
-      else if (e.Form is GroupForm)
-      {
-        SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
-      }
-    }
-
-    private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
-    {
-      if (e.Form is EditAutoTypeItemForm)
-      {
-        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
-        rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
-      }
-      else if (e.Form is GroupForm)
-      {
-        SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
-      }
-    }
-
-    private void PlaceholdersLinkClicked(object sender, LinkClickedEventArgs e)
-    {
-      CustomRichTextBoxEx rtbPlaceholders = sender as CustomRichTextBoxEx;
-      EditAutoTypeItemForm form = rtbPlaceholders.Parent as EditAutoTypeItemForm;
-
-      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
-      if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
-      {
-        rbKeySeq.Text = ExclusionPlaceholder;
-        rbKeySeq.Select(ExclusionPlaceholder.Length, 0);
-      }
-    }
-
-    public static Control FindControl(string control, Control form)
-    {
-      if (string.IsNullOrEmpty(control) || form == null) return null;
-
-      Control[] cntrls = form.Controls.Find(control, true);
-
-      if (cntrls.Length == 0) return null;
-      else return cntrls[0];
-    }
-
-    public override string UpdateUrl
-    {
-      get { return @"https://raw.githubusercontent.com/michue/autotypeexclude/main/version.info"; }
-    }
-
-    public override Image SmallIcon
-    {
-      get { return GfxUtil.ScaleImage(Resources.SmallIcon, 16, 16); }
-    }
+    #endregion
   }
 }

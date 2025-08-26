@@ -1,15 +1,15 @@
 # Auto-Type Exclude
 [![Version](https://img.shields.io/github/release/michue/autotypeexclude)](https://github.com/michue/autotypeexclude/releases/latest)
 [![Releasedate](https://img.shields.io/github/release-date/michue/autotypeexclude)](https://github.com/michue/autotypeexclude/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/michue/autotypeexclude/total?color=%2300cc00)](https://github.com/michue/autotypeexclude/releases/latest/download/AutoTypeExclude.plgx)\
+[![Downloads](https://img.shields.io/github/downloads/michue/autotypeexclude/total?color=%2300cc00)](https://github.com/michue/autotypeexclude/releases)\
 [![License: GPLv3](https://img.shields.io/github/license/michue/autotypeexclude)](https://www.gnu.org/licenses/gpl-3.0)
 
 This KeePass plugin extends KeePass' Auto-Type feature with an additional placeholder, `{EXCLUDE_ENTRY}`. This allows you to exclude an entry from auto-typing based on the target window specifier.
 
 # Table of Contents
 - [Usage](#usage)
+- [Download](#download)
 - [Translations](#translations)
-- [Download & updates](#download--updates)
 - [Requirements](#requirements)
 
 # Usage
@@ -38,18 +38,22 @@ The window specifier should match the site you want this entry to be excluded fr
 
 The next time you use Auto-Type to login in to your *Steam Heritage* account, you won't to bothered by the selection dialog and can enjoy Britain's industrial heritage right away.
 
+# Download
+Please follow these links to download the plugin file itself.
+- [Download newest release](https://github.com/michue/autotypeexclude/releases/latest)
+- [Version history](https://github.com/michue/autotypeexclude/releases)
+
+<!--
+In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck/) to update the plugin automatically.
+See the corresponding [wiki](https://github.com/Rookiestyle/EarlyUpdateCheck/wiki/One-click-plugin-update) for more details.
+-->
+
 # Translations
 Auto-Type Exclude does not expose any user facing text. Therefore translations are not necessary.
 
-# Download & updates
-Please follow these links to download the plugin file itself.
-- [Download newest release](https://github.com/michue/autotypeexclude/releases/latest/download/AutoTypeExclude.zip)
-- [Download history](https://github.com/michue/autotypeexclude/releases)
-
+<!--
 If you're interested in any of the available translations in addition, please download them from the [Translations](Translations) folder.
-
-In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck/) to update both the plugin and its translations automatically.
-See the corresponding [wiki](https://github.com/Rookiestyle/EarlyUpdateCheck/wiki/One-click-plugin-update) for more details.
+-->
 
 # Requirements
 * KeePass: 2.59

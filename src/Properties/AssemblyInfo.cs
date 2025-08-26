@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Auto-Type Exclude")]
 [assembly: AssemblyDescription(@"Provides a placeholder to exclude an entry from the Auto-Type feature based on the given target window specifier.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Michael Hüpkes")]
+[assembly: AssemblyCompany("Michael HÃ¼pkes")]
 [assembly: AssemblyProduct("KeePass Plugin")]
 [assembly: AssemblyCopyright("Copyright 2025")]
 [assembly: AssemblyTrademark("")]
@@ -24,6 +24,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can use the default the Revision and
 // Build Numbers by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyVersion("0.1.0")]
+[assembly: AssemblyFileVersion("0.1.0")]
 [assembly: NeutralResourcesLanguage("en")]

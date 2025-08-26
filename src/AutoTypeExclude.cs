@@ -21,7 +21,10 @@ namespace AutoTypeExclude
 
     #region class members
     private IPluginHost m_host = null;
+
     private MethodInfo m_miIsMatchWindow = null;
+    private EditAutoTypeItemForm m_fEditAutoTypeItemForm = null;
+    private CustomRichTextBoxEx m_rtbPlaceholders = null;
 
     private List<PwEntry> m_lExcludedPwEntries = new List<PwEntry>();
     #endregion
@@ -88,9 +91,10 @@ namespace AutoTypeExclude
     {
       if (e.Form is EditAutoTypeItemForm)
       {
-        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
-        rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
+        m_fEditAutoTypeItemForm = e.Form as EditAutoTypeItemForm;
+
+        m_rtbPlaceholders = FindControl("m_rtbPlaceholders", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+        m_rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
       }
       else if (e.Form is GroupForm)
       {
@@ -102,9 +106,9 @@ namespace AutoTypeExclude
     {
       if (e.Form is EditAutoTypeItemForm)
       {
-        EditAutoTypeItemForm form = e.Form as EditAutoTypeItemForm;
-        CustomRichTextBoxEx rtbPlaceholders = FindControl("m_rtbPlaceholders", form) as CustomRichTextBoxEx;
-        rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
+        m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
+        m_rtbPlaceholders = null;
+        m_fEditAutoTypeItemForm = null;
       }
       else if (e.Form is GroupForm)
       {
@@ -114,10 +118,8 @@ namespace AutoTypeExclude
 
     private void PlaceholdersLinkClicked(object sender, LinkClickedEventArgs e)
     {
-      CustomRichTextBoxEx rtbPlaceholders = sender as CustomRichTextBoxEx;
-      EditAutoTypeItemForm form = rtbPlaceholders.Parent as EditAutoTypeItemForm;
+      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
 
-      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", form) as CustomRichTextBoxEx;
       if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
       {
         rbKeySeq.Text = ExclusionPlaceholder;

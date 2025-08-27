@@ -23,6 +23,9 @@ namespace AutoTypeExclude
     private IPluginHost m_host = null;
 
     private MethodInfo m_miIsMatchWindow = null;
+
+    private FieldInfo m_fiAtConfig = null;
+    private FieldInfo m_fiEditSequenceOnly = null;
     private EditAutoTypeItemForm m_fEditAutoTypeItemForm = null;
     private CustomRichTextBoxEx m_rtbPlaceholders = null;
 
@@ -46,6 +49,9 @@ namespace AutoTypeExclude
       m_host = host;
 
       m_miIsMatchWindow = typeof(AutoType).GetMethod("IsMatchWindow", BindingFlags.Static | BindingFlags.NonPublic);
+
+      m_fiAtConfig = typeof(EditAutoTypeItemForm).GetField("m_atConfig", BindingFlags.Instance | BindingFlags.NonPublic);
+      m_fiEditSequenceOnly = typeof(EditAutoTypeItemForm).GetField("m_bEditSequenceOnly", BindingFlags.Instance | BindingFlags.NonPublic);
 
       GlobalWindowManager.WindowAdded += OnWindowAdded;
       GlobalWindowManager.WindowRemoved += OnWindowRemoved;
@@ -93,12 +99,15 @@ namespace AutoTypeExclude
       {
         m_fEditAutoTypeItemForm = e.Form as EditAutoTypeItemForm;
 
+        if ((bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm))
+        {
+          SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
+        }
+        else
+        {
         m_rtbPlaceholders = FindControl("m_rtbPlaceholders", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
         m_rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
       }
-      else if (e.Form is GroupForm)
-      {
-        SprEngine.FilterPlaceholderHints.Remove(ExclusionPlaceholder);
       }
     }
 
@@ -106,13 +115,21 @@ namespace AutoTypeExclude
     {
       if (e.Form is EditAutoTypeItemForm)
       {
+        AutoTypeConfig atConfig = m_fiAtConfig.GetValue(m_fEditAutoTypeItemForm) as AutoTypeConfig;
+
+        if ((bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm))
+        {
+          SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
+
+          atConfig.DefaultSequence = atConfig.DefaultSequence.Replace(ExclusionPlaceholder, "");
+        }
+        else
+        {
         m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
         m_rtbPlaceholders = null;
+        }
+
         m_fEditAutoTypeItemForm = null;
-      }
-      else if (e.Form is GroupForm)
-      {
-        SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
       }
     }
 

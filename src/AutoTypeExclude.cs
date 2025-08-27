@@ -25,6 +25,7 @@ namespace AutoTypeExclude
     private MethodInfo m_miIsMatchWindow = null;
 
     private FieldInfo m_fiAtConfig = null;
+    private FieldInfo m_fiAssocIndex = null;
     private FieldInfo m_fiEditSequenceOnly = null;
     private EditAutoTypeItemForm m_fEditAutoTypeItemForm = null;
     private CustomRichTextBoxEx m_rtbPlaceholders = null;
@@ -51,6 +52,7 @@ namespace AutoTypeExclude
       m_miIsMatchWindow = typeof(AutoType).GetMethod("IsMatchWindow", BindingFlags.Static | BindingFlags.NonPublic);
 
       m_fiAtConfig = typeof(EditAutoTypeItemForm).GetField("m_atConfig", BindingFlags.Instance | BindingFlags.NonPublic);
+      m_fiAssocIndex = typeof(EditAutoTypeItemForm).GetField("m_iAssocIndex", BindingFlags.Instance | BindingFlags.NonPublic);
       m_fiEditSequenceOnly = typeof(EditAutoTypeItemForm).GetField("m_bEditSequenceOnly", BindingFlags.Instance | BindingFlags.NonPublic);
 
       GlobalWindowManager.WindowAdded += OnWindowAdded;
@@ -105,9 +107,9 @@ namespace AutoTypeExclude
         }
         else
         {
-        m_rtbPlaceholders = FindControl("m_rtbPlaceholders", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
-        m_rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
-      }
+          m_rtbPlaceholders = FindControl("m_rtbPlaceholders", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+          m_rtbPlaceholders.LinkClicked += PlaceholdersLinkClicked;
+        }
       }
     }
 
@@ -125,8 +127,15 @@ namespace AutoTypeExclude
         }
         else
         {
-        m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
-        m_rtbPlaceholders = null;
+          m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
+          m_rtbPlaceholders = null;
+
+          AutoTypeAssociation atAssoc = null;
+          int assocIndex = (int)m_fiAssocIndex.GetValue(m_fEditAutoTypeItemForm);
+          if (assocIndex >= 0) atAssoc = atConfig.GetAt(assocIndex);
+          else atAssoc = atConfig.GetAt(atConfig.AssociationsCount - 1);
+          if (atAssoc.Sequence.Contains(ExclusionPlaceholder))
+            atAssoc.Sequence = ExclusionPlaceholder;
         }
 
         m_fEditAutoTypeItemForm = null;
@@ -148,9 +157,7 @@ namespace AutoTypeExclude
     #region auto-type event handlers
     private void AutoType_FilterCompilePre(object sender, AutoTypeEventArgs e)
     {
-      /* This is only required if the Auto-Type Entry Selection window is NOT shown
-       * If the window is shown, the auto-type sequences are already adjusted
-      */
+      // Just in case, replace the sequence during auto-typing (should never happen anyways)
       e.Sequence = e.Sequence.Replace(ExclusionPlaceholder, "");
     }
 

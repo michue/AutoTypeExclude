@@ -23,9 +23,9 @@ The plugin looks for this placeholder and excludes the entry, if the window spec
 
 **Notes:**
 1. It is sufficient, if the placeholder is only part of the sequence - excluding will work nonetheless.\
-But since the rest of the sequence will never be used, the plugins trims the sequence to only `{EXCLUDE_ENTRY}` for clarity.
-2. The placeholder can not be used within a default sequence (for a folder or an entry).\
-Therefore the placeholder is not offered in the placeholder selection in this case and will stripped after closing the dialog, if it would have been typed manually.
+But since the rest of the sequence will never be used, the plugin trims the sequence to only `{EXCLUDE_ENTRY}` for clarity.
+2. The placeholder can not be used within a default sequence (for an entry or a folder).\
+Therefore the placeholder is not offered in the placeholder selection in this case and will be stripped after closing the dialog, if it was typed manually.
 
 ## Example
 Let's assume you have an entry for the gaming platform [Steam](https://store.steampowered.com/), but you also are a big fan of industrial heritage and keep an account on [Steam Heritage](https://www.steamheritage.co.uk/).

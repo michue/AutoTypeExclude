@@ -19,6 +19,20 @@ namespace AutoTypeExclude
   {
     public static string ExclusionPlaceholder = "{EXCLUDE_ENTRY}";
 
+    private const string Rsa4096PublicKeyXml =
+      @"<RSAKeyValue><Modulus>1t+XOJUOXCyTUiTNSIonDFtp/VnXicZsUeyAqb9MmV" +
+      @"PnLC+UyZjxJKwv7vsM1Ox1nGYQba2OpgfXrEhzIQ8ov/wjOEPYgMnajppr/NsCJ6" +
+      @"79QDvgeZ7k/Ya7mxD4+L+Zkdt/jsQPiy4VIQdaTZ6IiCk5O0yORjD9LxShFajYYQ" +
+      @"xJFTnex93aiwM38JZLuNhrImM2hfsUxQdeBrg47bueWF4EyVTwoLr5WAR1GYAg2+" +
+      @"5/UdoXln80uM38/2xxMwW01kZjJmjlpCFej4I8ObczCjg6d+P1p4KqKqvqP6nFgN" +
+      @"tav4FcstOPamkdXE8gT0yXPkIpIHgl0Z2dsjSX7g7olaauFfS9PukFwGhEP/QIZV" +
+      @"W0+YN0Dnp5RCXIA4thl/B7U9THW67TkEfRxl6ft+MfwuC+3AWSCWtqaossBzie1K" +
+      @"uD7eaI0A2YoEaubRh3Q64aoTQO9RCyCmk6eDMJRbx1LrCeZ8ADEGRCkrkZyRuuYS" +
+      @"5S8aAKxby9AGqOy3PdtkPP2dj3NqR/iqAI/4z13oCUJ3c76KfxvX/JSpg7zgScCQ" +
+      @"tm/OAPq3IALtCy+4CxCQv4aEy5ML1++PzCWDcqETaXM2P08znYFaYEsor24RxoA7" +
+      @"YdLGhksyQ3MDKioFxwIcn4eJtDzD5b9b56roOvuVSHnw0YXp8Du10uBZlGPo61NR" +
+      @"c=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+
     #region class members
     private IPluginHost m_host = null;
 
@@ -48,6 +62,8 @@ namespace AutoTypeExclude
     {
       Terminate();
       m_host = host;
+
+      UpdateCheckEx.SetFileSigKey(UpdateUrl, Rsa4096PublicKeyXml);
 
       m_miIsMatchWindow = typeof(AutoType).GetMethod("IsMatchWindow", BindingFlags.Static | BindingFlags.NonPublic);
 

@@ -46,10 +46,8 @@ Please follow these links to download the plugin file itself.
 - [Download newest release](https://github.com/michue/autotypeexclude/releases/latest)
 - [Version history](https://github.com/michue/autotypeexclude/releases)
 
-<!--
-In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/rookiestyle/earlyupdatecheck/) to update the plugin automatically.
+In addition to the manual way of downloading the plugin, you can use [EarlyUpdateCheck](https://github.com/Rookiestyle/EarlyUpdateCheck) by [Rookiestyle](https://github.com/Rookiestyle) to update the plugin automatically.
 See the corresponding [wiki](https://github.com/Rookiestyle/EarlyUpdateCheck/wiki/One-click-plugin-update) for more details.
--->
 
 # Translations
 Auto-Type Exclude does not expose any user facing text. Therefore translations are not necessary.

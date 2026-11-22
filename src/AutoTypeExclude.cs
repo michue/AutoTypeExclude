@@ -131,27 +131,39 @@ namespace AutoTypeExclude
 
     private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
     {
-      if (e.Form is EditAutoTypeItemForm)
+      if (m_fEditAutoTypeItemForm != null && e.Form == m_fEditAutoTypeItemForm)
       {
-        AutoTypeConfig atConfig = m_fiAtConfig.GetValue(m_fEditAutoTypeItemForm) as AutoTypeConfig;
+        bool bEditSequenceOnly = (bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm);
 
-        if ((bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm))
+        // Do post-processing only if the user clicked OK
+        if (m_fEditAutoTypeItemForm.DialogResult == DialogResult.OK)
+        {
+          AutoTypeConfig atConfig = m_fiAtConfig.GetValue(m_fEditAutoTypeItemForm) as AutoTypeConfig;
+
+          if (bEditSequenceOnly)
+          {
+            atConfig.DefaultSequence = atConfig.DefaultSequence.Replace(ExclusionPlaceholder, "");
+          }
+          else
+          {
+            AutoTypeAssociation atAssoc = null;
+            int assocIndex = (int)m_fiAssocIndex.GetValue(m_fEditAutoTypeItemForm);
+            if (assocIndex >= 0) atAssoc = atConfig.GetAt(assocIndex);
+            else atAssoc = atConfig.GetAt(atConfig.AssociationsCount - 1);
+            if (atAssoc.Sequence.Contains(ExclusionPlaceholder))
+              atAssoc.Sequence = ExclusionPlaceholder;
+          }
+        }
+
+        // Ceanup in any case
+        if (bEditSequenceOnly)
         {
           SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
-
-          atConfig.DefaultSequence = atConfig.DefaultSequence.Replace(ExclusionPlaceholder, "");
         }
         else
         {
           m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
           m_rtbPlaceholders = null;
-
-          AutoTypeAssociation atAssoc = null;
-          int assocIndex = (int)m_fiAssocIndex.GetValue(m_fEditAutoTypeItemForm);
-          if (assocIndex >= 0) atAssoc = atConfig.GetAt(assocIndex);
-          else atAssoc = atConfig.GetAt(atConfig.AssociationsCount - 1);
-          if (atAssoc.Sequence.Contains(ExclusionPlaceholder))
-            atAssoc.Sequence = ExclusionPlaceholder;
         }
 
         m_fEditAutoTypeItemForm = null;

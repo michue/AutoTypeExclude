@@ -13,11 +13,11 @@ This KeePass plugin extends KeePass' Auto-Type feature with an additional placeh
 - [Requirements](#requirements)
 
 # Usage
-The reduce the configuration amount for type-type, KeePass uses entry titles as filters for window titles by default.
+To reduce the configuration amount for auto-type, KeePass uses entry titles as filters for window titles by default.
 But sometimes you find yourself in the situation, that the entry title matches more windows than you would've liked.
 To exclude the entry from auto-typing on those windows, **Auto-Type Exclude** provides the placeholder `{EXCLUDE_ENTRY}`.
 
-Simply create a custom sequence with matching the title of the window, on which you want the entry to be excluded from auto-typing.
+Simply create a custom sequence with matching the title of the window on which you want the entry to be excluded from auto-typing.
 As the sequence select the new placeholder `{EXCLUDE_ENTRY}`.
 The plugin looks for this placeholder and excludes the entry, if the window specifier matches the active window title.
 

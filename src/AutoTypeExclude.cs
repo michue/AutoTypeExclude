@@ -131,27 +131,39 @@ namespace AutoTypeExclude
 
     private void OnWindowRemoved(object sender, GwmWindowEventArgs e)
     {
-      if (e.Form is EditAutoTypeItemForm)
+      if (m_fEditAutoTypeItemForm != null && e.Form == m_fEditAutoTypeItemForm)
       {
-        AutoTypeConfig atConfig = m_fiAtConfig.GetValue(m_fEditAutoTypeItemForm) as AutoTypeConfig;
+        bool bEditSequenceOnly = (bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm);
 
-        if ((bool)m_fiEditSequenceOnly.GetValue(m_fEditAutoTypeItemForm))
+        // Do post-processing only if the user clicked OK
+        if (m_fEditAutoTypeItemForm.DialogResult == DialogResult.OK)
+        {
+          AutoTypeConfig atConfig = m_fiAtConfig.GetValue(m_fEditAutoTypeItemForm) as AutoTypeConfig;
+
+          if (bEditSequenceOnly)
+          {
+            atConfig.DefaultSequence = atConfig.DefaultSequence.Replace(ExclusionPlaceholder, "");
+          }
+          else
+          {
+            AutoTypeAssociation atAssoc = null;
+            int assocIndex = (int)m_fiAssocIndex.GetValue(m_fEditAutoTypeItemForm);
+            if (assocIndex >= 0) atAssoc = atConfig.GetAt(assocIndex);
+            else atAssoc = atConfig.GetAt(atConfig.AssociationsCount - 1);
+            if (atAssoc.Sequence.Contains(ExclusionPlaceholder))
+              atAssoc.Sequence = ExclusionPlaceholder;
+          }
+        }
+
+        // Ceanup in any case
+        if (bEditSequenceOnly)
         {
           SprEngine.FilterPlaceholderHints.Add(ExclusionPlaceholder);
-
-          atConfig.DefaultSequence = atConfig.DefaultSequence.Replace(ExclusionPlaceholder, "");
         }
         else
         {
           m_rtbPlaceholders.LinkClicked -= PlaceholdersLinkClicked;
           m_rtbPlaceholders = null;
-
-          AutoTypeAssociation atAssoc = null;
-          int assocIndex = (int)m_fiAssocIndex.GetValue(m_fEditAutoTypeItemForm);
-          if (assocIndex >= 0) atAssoc = atConfig.GetAt(assocIndex);
-          else atAssoc = atConfig.GetAt(atConfig.AssociationsCount - 1);
-          if (atAssoc.Sequence.Contains(ExclusionPlaceholder))
-            atAssoc.Sequence = ExclusionPlaceholder;
         }
 
         m_fEditAutoTypeItemForm = null;
@@ -160,12 +172,17 @@ namespace AutoTypeExclude
 
     private void PlaceholdersLinkClicked(object sender, LinkClickedEventArgs e)
     {
-      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // In KeePass 2.62, the control name was changed from m_rbKeySeq to m_rbtKeySeq
+      CustomRichTextBoxEx rtbKeySeq = FindControl("m_rtbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // Try the old name to stay compatible with KeePass 2.61 and older
+      if (rtbKeySeq == null) rtbKeySeq = FindControl("m_rbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // Return if the control is still not found
+      if (rtbKeySeq == null) return;
 
-      if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
+      if (e.LinkText.Equals(ExclusionPlaceholder) || rtbKeySeq.Text.Contains(ExclusionPlaceholder))
       {
-        rbKeySeq.Text = ExclusionPlaceholder;
-        rbKeySeq.Select(ExclusionPlaceholder.Length, 0);
+        rtbKeySeq.Text = ExclusionPlaceholder;
+        rtbKeySeq.Select(ExclusionPlaceholder.Length, 0);
       }
     }
     #endregion

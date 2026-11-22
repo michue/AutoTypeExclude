@@ -160,12 +160,17 @@ namespace AutoTypeExclude
 
     private void PlaceholdersLinkClicked(object sender, LinkClickedEventArgs e)
     {
-      CustomRichTextBoxEx rbKeySeq = FindControl("m_rbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // In KeePass 2.62, the control name was changed from m_rbKeySeq to m_rbtKeySeq
+      CustomRichTextBoxEx rtbKeySeq = FindControl("m_rtbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // Try the old name to stay compatible with KeePass 2.61 and older
+      if (rtbKeySeq == null) rtbKeySeq = FindControl("m_rbKeySeq", m_fEditAutoTypeItemForm) as CustomRichTextBoxEx;
+      // Return if the control is still not found
+      if (rtbKeySeq == null) return;
 
-      if (e.LinkText.Equals(ExclusionPlaceholder) || rbKeySeq.Text.Contains(ExclusionPlaceholder))
+      if (e.LinkText.Equals(ExclusionPlaceholder) || rtbKeySeq.Text.Contains(ExclusionPlaceholder))
       {
-        rbKeySeq.Text = ExclusionPlaceholder;
-        rbKeySeq.Select(ExclusionPlaceholder.Length, 0);
+        rtbKeySeq.Text = ExclusionPlaceholder;
+        rtbKeySeq.Select(ExclusionPlaceholder.Length, 0);
       }
     }
     #endregion
